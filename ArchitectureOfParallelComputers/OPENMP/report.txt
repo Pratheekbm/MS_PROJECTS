@@ -1,0 +1,170 @@
+
+ARCHITECTURE OF PARALLEL COMPUTERS 
+PROGRAM 1
+**************************************************************************
+KERT SPENCER
+and
+PRATHEEK BRAMHASAMUDRA MALLIKARJUNA
+****************************************************************************
+
+Problem 1
+
+a) We get 1 "part2" print without pragma and 8 "part2" with pragma. Enabling pragma
+executes the statement in parallel with default number of threads = 8, hence 8
+"part2" prints.
+
+b) Adding num_threads(3) along with the pragma sets number of threads to 3
+c) Using omp_set_num_threads(2) we set number of threads to 2 globally. This
+is overwritten by num_threads(3) used for "part2", Hence we get 2 prints of
+"part1" and "part3" but 3 prints of "part2".
+
+Problem 2
+
+a)
+Hello from thread 0 of 10
+Hello from thread 1 of 10
+Hello from thread 2 of 10
+Hello from thread 3 of 10
+Hello from thread 4 of 10
+Hello from thread 5 of 10
+Hello from thread 9 of 10
+Hello from thread 6 of 10
+Hello from thread 7 of 10
+Hello from thread 8 of 10
+
+b)
+Hello from thread 5 of 8
+Hello from thread 7 of 8
+Hello from thread 6 of 8
+Hello from thread 4 of 8
+Hello from thread 3 of 8
+Hello from thread 0 of 8
+Hello from thread 1 of 8
+Hello from thread 2 of 8
+
+
+Problem 3
+
+If variable j is not private, it will be modified by all the threads and thus
+it becomes conflicting. Making it private will result in each thread having
+their own copy of j and thus an increment of j by a thread will not be visible
+to any thread but itself.
+
+
+Problem 4
+
+a) Without the reduction operation or putting variable 'a' under critical section,
+the possibility that two threads will read the value before either writes back the
+updated value is introduced. Thus, components of the series can be lost, resulting
+in an incorrect result.
+
+b)
+Sequential sum: 	499562283
+Parallel sum: 		499562283
+
+c)
+Sequential sum: 	499562283
+Parallel sum: 		499562283
+
+d) Atomic instructions are supported by the some hardware.
+Making a statement atomic is the indication to the hardware that the corresponding statement should be executed sequentially.
+On the other hand, even though making a section critical has the same effect, it is implemented by software instead.
+
+Problem 5
+
+1) Variables i and id should be declared as private or else they become
+conflicting giving different results depending on the execution order.
+
+2) If variable a is declared as private we get following output
+Value inside parallel region from Thread ID: 6, a = 0
+Value inside parallel region from Thread ID: 6, a = 0
+Value inside parallel region from Thread ID: 6, a = 0
+Value inside parallel region from Thread ID: 2, a = 0
+Value inside parallel region from Thread ID: 2, a = 0
+Value inside parallel region from Thread ID: 2, a = 0
+Value inside parallel region from Thread ID: 4, a = -1
+Value inside parallel region from Thread ID: 4, a = -1
+Value inside parallel region from Thread ID: 4, a = -1
+Value inside parallel region from Thread ID: 3, a = 0
+Value inside parallel region from Thread ID: 3, a = 0
+Value inside parallel region from Thread ID: 3, a = 0
+Value inside parallel region from Thread ID: 0, a = 0
+Value inside parallel region from Thread ID: 0, a = 0
+Value inside parallel region from Thread ID: 0, a = 0
+Value inside parallel region from Thread ID: 7, a = 0
+Value inside parallel region from Thread ID: 7, a = 0
+Value inside parallel region from Thread ID: 7, a = 0
+Value inside parallel region from Thread ID: 5, a = 0
+Value inside parallel region from Thread ID: 5, a = 0
+Value inside parallel region from Thread ID: 5, a = 0
+Value inside parallel region from Thread ID: 1, a = 0
+Value inside parallel region from Thread ID: 1, a = 0
+Value inside parallel region from Thread ID: 1, a = 0
+Value outside parallel region, a = 20
+
+Here, value of a inside the for loop is initialized to random value (mostly 0
+in this case) as variable a is private to each thread. Value of a outside the for loop remains 20.
+
+3) If variable a is initialized as firstprivate, we get following output,
+Value inside parallel region from Thread ID: 5, a = 20
+Value inside parallel region from Thread ID: 5, a = 20
+Value inside parallel region from Thread ID: 5, a = 20
+Value inside parallel region from Thread ID: 0, a = 20
+Value inside parallel region from Thread ID: 0, a = 20
+Value inside parallel region from Thread ID: 6, a = 20
+Value inside parallel region from Thread ID: 6, a = 20
+Value inside parallel region from Thread ID: 6, a = 20
+Value inside parallel region from Thread ID: 7, a = 20
+Value inside parallel region from Thread ID: 7, a = 20
+Value inside parallel region from Thread ID: 7, a = 20
+Value inside parallel region from Thread ID: 1, a = 20
+Value inside parallel region from Thread ID: 1, a = 20
+Value inside parallel region from Thread ID: 1, a = 20
+Value inside parallel region from Thread ID: 3, a = 20
+Value inside parallel region from Thread ID: 3, a = 20
+Value inside parallel region from Thread ID: 3, a = 20
+Value inside parallel region from Thread ID: 2, a = 20
+Value inside parallel region from Thread ID: 2, a = 20
+Value inside parallel region from Thread ID: 2, a = 20
+Value inside parallel region from Thread ID: 4, a = 20
+Value inside parallel region from Thread ID: 4, a = 20
+Value inside parallel region from Thread ID: 0, a = 20
+Value inside parallel region from Thread ID: 4, a = 20
+Value outside parallel region, a = 20
+
+Here, even though a is private to each thread, it is initialized to 20. Hence
+variable a is printed as 20 inside and outside the for loop
+
+4) lastprivate needs for clause and is typically used for loop variable
+dependent statements. If we use the statement 
+#pragma omp parallel for private(i, id) lastprivate(a)
+we get following output,
+Value inside parallel region from Thread ID: 0, a = 32767
+Value inside parallel region from Thread ID: 1, a = 0
+Value inside parallel region from Thread ID: 2, a = 0
+Value outside parallel region, a = 0
+
+Here, a is initialized by random value, and hence the random prints for prints
+inside the for loop. On the other hand, a = 0 is executed last by thread 2, and
+this value is retained for the print outside the for loop as well, since a is
+lastprivate.
+
+Problem 6
+a) Output is,
+3.141593
+Time = 5.651219
+
+b)
+Output for static scheduling is,
+3.141593
+Time = 8.961653
+
+Output for Dynamic scheduling is,
+3.141593
+Time = 20.837411
+
+The execution time for dynamic scheduling is more compared to static scheduling
+because dynamic scheduling causes additional overhead with the selection of
+jobs to perform. The overhead outweighs the potential benefits of ensuring that
+threads that are behind get less work than threads that are ahead.
+

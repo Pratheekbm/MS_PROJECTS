@@ -1,0 +1,59 @@
+===== SP15 506 BUS BASED CACHE Configuration =====
+L1_SIZE:              32768
+L1_ASSOC:             8
+L1_BLOCKSIZE:         32
+NUMBER OF PROCESSORS: 4
+COHERENCE PROTOCOL:   MESI with FBV
+TRACE FILE:           canneal.04t.longTrace
+============ Simulation results (Cache 0) ============ 
+1 . number of reads:                      112661
+2 . number of read misses:                6510
+3 . number of writes:                     11942
+4 . number of write misses:               14
+5 . total miss rate:                      0.052358
+6 . number of writebacks:                 2137
+7 . number of cache-to-cache transfers:   4709
+8 . number of SignalRds:                  4817
+9 . number of SignalRdXs:                 8
+10. number of SignalUpgrs                 662
+11. number of invalidations:              1936
+12. number of interventions:              1613
+============ Simulation results (Cache 1) ============ 
+1 . number of reads:                      110830
+2 . number of read misses:                6527
+3 . number of writes:                     11710
+4 . number of write misses:               21
+5 . total miss rate:                      0.053436
+6 . number of writebacks:                 2069
+7 . number of cache-to-cache transfers:   1630
+8 . number of SignalRds:                  4877
+9 . number of SignalRdXs:                 17
+10. number of SignalUpgrs                 634
+11. number of invalidations:              1964
+12. number of interventions:              1550
+============ Simulation results (Cache 2) ============ 
+1 . number of reads:                      114938
+2 . number of read misses:                6496
+3 . number of writes:                     12383
+4 . number of write misses:               15
+5 . total miss rate:                      0.051138
+6 . number of writebacks:                 2093
+7 . number of cache-to-cache transfers:   24
+8 . number of SignalRds:                  4847
+9 . number of SignalRdXs:                 12
+10. number of SignalUpgrs                 658
+11. number of invalidations:              1937
+12. number of interventions:              1573
+============ Simulation results (Cache 3) ============ 
+1 . number of reads:                      113428
+2 . number of read misses:                6526
+3 . number of writes:                     12108
+4 . number of write misses:               19
+5 . total miss rate:                      0.052136
+6 . number of writebacks:                 2144
+7 . number of cache-to-cache transfers:   40
+8 . number of SignalRds:                  4813
+9 . number of SignalRdXs:                 18
+10. number of SignalUpgrs                 647
+11. number of invalidations:              1951
+12. number of interventions:              1612
